@@ -1,0 +1,41 @@
+General Rules
+
+Always use TypeScript for all code.
+Use types only for necessary data; avoid over-typing simple or obvious structures.
+Follow the KISS (Keep It Simple, Stupid) principle: Keep code as simple as possible while achieving the required functionality.
+Adhere to the Single Responsibility Principle (SRP): Each module, class, or function should have only one reason to change.
+
+Backend Rules
+
+Maintain the following project structure:
+
+controller/: Handles incoming requests, orchestrates services, and manages responses.
+service/: Contains business logic and interacts with data access layers.
+dataaccess/: Manages database interactions, queries, and data retrieval/persistence.
+model/: Defines data models, schemas, or entities.
+utils/: Utility functions, helpers, or shared modules that don't fit elsewhere.
+
+
+Error handling:
+
+Only use try/catch blocks in controller files to handle errors at the entry point.
+In all other files (service, dataaccess, model, utils), throw errors explicitly using throw new Error(...) or custom error classes. Do not catch errors in these layers; propagate them up to the controller.
+
+
+
+Frontend Rules
+
+Data management:
+
+Manage local component data and state using React hooks (e.g., useState, useEffect).
+Use React Context API for global state management, including sharing data from hooks across components.
+
+
+Styling:
+
+Use Tailwind CSS for utility classes.
+Use SCSS for custom stylesheets where needed (e.g., variables, mixins, or complex selectors).
+Do not use inline CSS (no style attributes or objects in JSX).
+
+
+Ensure all components and hooks are written in TypeScript, following the general typing rule above.
