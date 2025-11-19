@@ -95,11 +95,6 @@ class AuthService {
     localStorage.setItem('jwt_token', token);
   }
 
-  private getStoredUser(phoneNumber: string): User | null {
-    const stored = localStorage.getItem(`user_${phoneNumber}`);
-    return stored ? JSON.parse(stored) : null;
-  }
-
   private saveUser(user: User): void {
     localStorage.setItem('current_user', JSON.stringify(user));
     localStorage.setItem(`user_${user.phoneNumber}`, JSON.stringify(user));
