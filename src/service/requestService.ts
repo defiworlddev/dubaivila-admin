@@ -65,6 +65,10 @@ class RequestService {
     );
     return this.convertServerRequest(response.request);
   }
+
+  async deleteRequest(requestId: string): Promise<void> {
+    await api.delete(`/api/admin/requests/${requestId}`);
+  }
 }
 
 export const requestService = new RequestService();
