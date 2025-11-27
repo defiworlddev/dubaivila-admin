@@ -5,7 +5,7 @@ export const UserList = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [approvingIds, setApprovingIds] = useState<Set<string>>(new Set());
+  const [updatingIds, setUpdatingIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     loadUsers();
@@ -25,18 +25,18 @@ export const UserList = () => {
     }
   };
 
-  const handleApproveAgent = async (userId: string) => {
-    setApprovingIds((prev) => new Set(prev).add(userId));
+  const handleToggleIsAgent = async (userId: string, currentIsAgent: boolean) => {
+    setUpdatingIds((prev) => new Set(prev).add(userId));
     try {
-      const updatedUser = await adminService.approveAgent(userId);
+      const updatedUser = await adminService.updateUserIsAgent(userId, !currentIsAgent);
       setUsers((prevUsers) =>
         prevUsers.map((user) => (user.id === userId ? updatedUser : user))
       );
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to approve agent');
-      console.error('Failed to approve agent:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update user agent status');
+      console.error('Failed to update user agent status:', err);
     } finally {
-      setApprovingIds((prev) => {
+      setUpdatingIds((prev) => {
         const next = new Set(prev);
         next.delete(userId);
         return next;
@@ -98,9 +98,6 @@ export const UserList = () => {
                     Role
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-primary-700 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -131,32 +128,19 @@ export const UserList = () => {
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {user.isAgent ? (
-                        user.isApproved ? (
-                          <span className="px-2.5 py-1 rounded text-xs font-semibold bg-green-100 text-green-800">
-                            Approved
-                          </span>
-                        ) : (
-                          <span className="px-2.5 py-1 rounded text-xs font-semibold bg-accent-100 text-accent-800">
-                            Pending Approval
-                          </span>
-                        )
-                      ) : (
-                        <span className="px-2.5 py-1 rounded text-xs font-semibold bg-gray-100 text-gray-600">
-                          N/A
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {user.isAgent && !user.isApproved && (
-                        <button
-                          onClick={() => handleApproveAgent(user.id)}
-                          disabled={approvingIds.has(user.id)}
-                          className="px-4 py-2 bg-primary-700 text-white rounded-lg text-sm font-semibold hover:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {approvingIds.has(user.id) ? 'Approving...' : 'Approve'}
-                        </button>
-                      )}
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={user.isAgent}
+                          onChange={() => handleToggleIsAgent(user.id, user.isAgent)}
+                          disabled={updatingIds.has(user.id)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"></div>
+                        {updatingIds.has(user.id) && (
+                          <span className="ml-2 text-sm text-primary-600">Updating...</span>
+                        )}
+                      </label>
                     </td>
                   </tr>
                 ))}

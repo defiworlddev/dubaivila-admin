@@ -6,7 +6,6 @@ export interface AdminUser {
   name?: string;
   isNewUser: boolean;
   isAgent: boolean;
-  isApproved: boolean;
   createdAt: string;
 }
 
@@ -28,7 +27,6 @@ interface ServerUser {
   name?: string;
   isNewUser: boolean;
   isAgent: boolean;
-  isApproved: boolean;
   createdAt: string;
 }
 
@@ -52,7 +50,6 @@ class AdminService {
       name: serverUser.name,
       isNewUser: serverUser.isNewUser,
       isAgent: serverUser.isAgent,
-      isApproved: serverUser.isApproved,
       createdAt: serverUser.createdAt,
     };
   }
@@ -76,9 +73,10 @@ class AdminService {
     return response.users.map((user) => this.convertServerUser(user));
   }
 
-  async approveAgent(userId: string): Promise<AdminUser> {
-    const response = await api.post<{ user: ServerUser }>(
-      `/api/admin/agents/${userId}/approve`
+  async updateUserIsAgent(userId: string, isAgent: boolean): Promise<AdminUser> {
+    const response = await api.put<{ user: ServerUser }>(
+      `/api/admin/users/${userId}/isAgent`,
+      { isAgent }
     );
     return this.convertServerUser(response.user);
   }
