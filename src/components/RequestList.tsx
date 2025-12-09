@@ -9,9 +9,9 @@ import storeImage from '../assets/store.webp';
 import otherImage from '../assets/other.webp';
 
 const statusColors = {
-  pending: 'bg-accent-100 text-accent-800',
-  in_progress: 'bg-primary-100 text-primary-800',
-  completed: 'bg-green-100 text-green-800',
+  'New Request': 'bg-accent-100 text-accent-800',
+  'Receiving Offers': 'bg-primary-100 text-primary-800',
+  'Deal Closed 💯': 'bg-green-100 text-green-800',
 };
 
 
@@ -226,9 +226,9 @@ export const RequestList = () => {
                             disabled:opacity-50 disabled:cursor-not-allowed
                           `}
                         >
-                          <option value="pending">Pending</option>
-                          <option value="in_progress">In Progress</option>
-                          <option value="completed">Completed</option>
+                          <option value="New Request">New Request</option>
+                          <option value="Receiving Offers">Receiving Offers</option>
+                          <option value="Deal Closed 💯">Deal Closed 💯</option>
                         </select>
                         <button
                           onClick={() => handleDelete(request.id)}
