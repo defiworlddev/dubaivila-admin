@@ -15,8 +15,8 @@ const statusColors = {
 };
 
 
-const getPropertyImage = (propertyType: string): string => {
-  const type = propertyType.toLowerCase();
+const getPropertyImage = (category: string): string => {
+  const type = category.toLowerCase();
   if (type === 'villa') return villaImage;
   if (type === 'apartment') return apartmentImage;
   if (type === 'office') return officeImage;
@@ -192,8 +192,8 @@ export const RequestList = () => {
                 {/* Image */}
                 <div className="relative w-32 h-32 flex-shrink-0 bg-primary-50">
                   <img
-                    src={getPropertyImage(request.propertyType)}
-                    alt={request.propertyType}
+                    src={getPropertyImage(request.category)}
+                    alt={request.category}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -204,11 +204,17 @@ export const RequestList = () => {
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <h3 className="text-lg font-bold text-primary-900 mb-1">
-                          {request.location}
+                          {request.area}
                         </h3>
-                        <p className="text-sm text-primary-600 font-medium">
-                          {request.propertyType}
-                        </p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm text-primary-600 font-medium">
+                            {request.category}
+                          </p>
+                          <span className="text-primary-400">•</span>
+                          <p className="text-sm text-primary-700 font-medium">
+                            {request.buyOrRent}
+                          </p>
+                        </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <select
@@ -288,22 +294,22 @@ export const RequestList = () => {
                           {request.budget}
                         </span>
                       </div>
-                      {request.bedrooms && (
+                      {request.bed && (
                         <div className="text-sm text-primary-600">
-                          {request.bedrooms} Bedrooms
+                          {request.bed} Bedrooms
                         </div>
                       )}
-                      {request.bathrooms && (
+                      {request.size && (
                         <div className="text-sm text-primary-600">
-                          {request.bathrooms} Bathrooms
+                          Size: {request.size}
                         </div>
                       )}
                     </div>
 
-                    {request.additionalRequirements && (
+                    {request.additionalInfo && (
                       <div className="mt-3 text-sm text-primary-600">
-                        <span className="font-semibold">Requirements: </span>
-                        {request.additionalRequirements}
+                        <span className="font-semibold">Additional Info: </span>
+                        {request.additionalInfo}
                       </div>
                     )}
                   </div>
